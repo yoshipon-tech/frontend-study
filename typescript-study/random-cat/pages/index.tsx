@@ -1,6 +1,7 @@
 import { type } from "os";
 import { useEffect, useState } from "react";
 import { GetServerSideProps, NextPage } from "next";
+import styles from "./index.module.css"
 
 // getServerSidePropsから渡されるpropsの型
 type Props = {
@@ -14,7 +15,6 @@ type Image = {
 const fetchImage = async (): Promise<Image> => {
   const res = await fetch("https://api.thecatapi.com/v1/images/search")
   const images = await res.json();
-  console.log(images.alt);
   return images[0];
 };
 
@@ -39,9 +39,13 @@ const IndexPage: NextPage<Props> = ({ initialImageUrl }) => {
 
   //ローディング中でなければ、画像を表示する
   return (
-    <div>
-      <button onClick={handleClick}>他のニャンコも見る</button>
-      <div>{loading || <img src={imageUrl} />}</div>
+    <div className={styles.page}>
+      <button onClick={handleClick} className={styles.button}>
+        他のニャンコも見る
+      </button>
+      <div className={styles.frame}>
+        {loading || <img src={imageUrl} className={styles.img} />}
+      </div>
     </div>
   );
 };
@@ -56,7 +60,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
   };
 };
 
-
 export default IndexPage;
-
-
